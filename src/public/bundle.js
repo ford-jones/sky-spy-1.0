@@ -4241,26 +4241,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ App)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _Container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Container */ "./client/components/Container.jsx");
-
-
-function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Container__WEBPACK_IMPORTED_MODULE_1__["default"], null));
-}
-
-/***/ }),
-
-/***/ "./client/components/Container.jsx":
-/*!*****************************************!*\
-  !*** ./client/components/Container.jsx ***!
-  \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Container)
-/* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
@@ -4271,7 +4251,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Container() {
+function App() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_useState, 2),
     data = _useState2[0],
@@ -4318,17 +4298,15 @@ function Container() {
           west: location.lon - 0.5
         });
       }
+      window.addEventListener('load', onLoad);
       setTimeout(function () {
         location !== null && geofence !== null ? setLoading(false) : null;
       }, 5000);
     });
   }, [location]);
-  function handleClick(e) {
+  function onLoad(e) {
     e.preventDefault();
-    // setTimeout(() => {
-    // setLoading(true)
-
-    if (data.length <= 0) {
+    if (data.length < 1) {
       var fetchFlightData = function fetchFlightData(method, params) {
         var api_key = "".concat("af7462db-fecd-4bab-bb5a-ae779d3fbf9d");
         params.api_key = api_key;
@@ -4346,6 +4324,9 @@ function Container() {
         param1: 'value1'
       });
     }
+  }
+  function handleClick(e) {
+    e.preventDefault();
     var depAkl = data.filter(function (x) {
       return x.dep_iata === 'AKL';
     });
@@ -4362,12 +4343,7 @@ function Container() {
     });
     var getFlights = JSON.parse(localStorage.getItem('flights'));
     getFlights ? setDataReady(true) : null;
-    console.log(getFlights);
-    console.log('geofence: ', geofence);
-    // setLoading(false)
-    // }, 5000)
   }
-
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "main"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("img", {
