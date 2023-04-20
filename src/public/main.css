@@ -25,6 +25,10 @@ flex-direction: column;
   text-align: center;
 }
 
+.main span {
+  font-style: italic;
+}
+
 /*  loader  */
 .loader {
   display: inline-block;

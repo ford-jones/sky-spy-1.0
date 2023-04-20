@@ -20,6 +20,7 @@ export default function App() {
   })
 
   useEffect(() => {
+    window.addEventListener('load', onLoad)
     navigator.geolocation.getCurrentPosition((position) => {
       setLocation({
         lon: position.coords.longitude,
@@ -34,8 +35,6 @@ export default function App() {
         })
       }
 
-      window.addEventListener('load', onLoad)
-
       setTimeout(() => {
         location !== null && geofence !== null ? setLoading(false) : null
       }, 5000)
@@ -46,7 +45,7 @@ export default function App() {
     e.preventDefault()
     if (data.length < 1) {
       function fetchFlightData(method, params) {
-        const api_key = `${process.env.AIR_LABS_API_KEY}`
+        const api_key = `${process.env.AIR_LABS_API_KEY2}`
         params.api_key = api_key
 
         axios
@@ -67,23 +66,19 @@ export default function App() {
   function handleClick(e) {
     e.preventDefault()
 
-    const depAkl = data.filter((x) => {
-      return x.dep_iata === 'AKL'
-    })
-
-    const arrAkl = data.filter((x) => {
-      return x.arr_iata === 'AKL'
-    })
-
-    const nearby = depAkl.concat(arrAkl)
-
+    const nearby = data.filter((flightLocation) => {
+      return(
+      flightLocation.lat < geofence.north &&
+      flightLocation.lat > geofence.south &&
+      flightLocation.lng < geofence.east &&
+      flightLocation.lng > geofence.west &&
+      flightLocation.status === 'en-route'
+      )
+  })
+  
     nearby.map((flight) => {
       if (
-        flight.lat < geofence.north &&
-        flight.lat > geofence.south &&
-        flight.lng < geofence.east &&
-        flight.lng > geofence.west &&
-        flight.status === 'en-route'
+        flight.arr_iata && flight.dep_iata 
       ) {
         setLocal(local.push(flight))
         const setFlights = JSON.stringify(local)
@@ -98,6 +93,7 @@ export default function App() {
   return (
     <>
       <div className="main">
+        <span>Track commercial airlines you see in the sky in real time!</span>
         <img src="./images/home.png" alt="plane_image" />
         <h1>Sky Spy 1.0.0</h1>
         {loading ? (
@@ -117,80 +113,3 @@ export default function App() {
     </>
   )
 }
-
-//  Dummy data:
-
-// [{
-//  aircraft_icao: "B789"
-//  airline_iata: "CZ"
-//  airline_icao: "CSN"
-//  alt: 10965
-//  arr_iata: "CAN"
-//  arr_icao: "ZGGG"
-//  dep_iata: "AKL"
-//  dep_icao: "NZAA"
-//  dir: 322
-//  flag: "CN"
-//  flight_iata: "CZ306"
-//  flight_icao: "CSN306"
-//  flight_number: "306"
-//  hex: "781360"
-//  lat: -12.041582
-//  lng: 141.385223
-//  reg_number: "B-1242"
-//  speed: 857
-//  squawk: "0234"
-//  status: "en-route"
-//  updated: 1681832020
-//  v_speed: 0.3
-// },
-// {
-//  aircraft_icao: "B738"
-//  airline_iata: "QF"
-//  airline_icao: "QFA"
-//  alt: 0
-//  arr_iata: "MEL"
-//  arr_icao: "YMML"
-//  dep_iata: "AKL"
-//  dep_icao: "NZAA"
-//  dir: 253
-//  flag: "AU"
-//  flight_iata: "QF158"
-//  flight_icao: "QFA158"
-//  flight_number: "158"
-//  hex: "7C77F4"
-//  lat: -37.667732
-//  lng: 144.847244
-//  reg_number: "VH-XZA"
-//  speed: 3
-//  squawk: "0240"
-//  status: "landed"
-//  updated: 1681831989
-// },
-// {
-// aircraft_icao: "B733"
-// airline_icao: "AWK"
-// alt: 11277
-// arr_iata: "AKL"
-// arr_icao: "NZAA"
-// dep_iata: "MEL"
-// dep_icao: "YMML"
-// dir: 58
-// flag: "NZ"
-// flight_icao: "AWK5"
-// flight_number: "5"
-// hex: "C81E1C"
-// lat: -31.486025
-// lng: 156.483658
-// reg_number: "ZK-TLE"
-// speed: 768
-// squawk: "1507"
-// status: "en-route"
-// updated: 1681831514
-// v_speed: 0.3
-// }
-// ]
-
-//
-
-// geofence: {north: -36.3646739, east: 175.2493547, south: -37.3646739, west: 174.2493547}

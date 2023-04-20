@@ -30,11 +30,11 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.LOCAL_PORT': JSON.stringify(process.env.LOCAL_PORT),
-      'process.env.AVIATION_STACK_API_KEY': JSON.stringify(
-        process.env.AVIATION_STACK_API_KEY
+      'process.env.AIR_LABS_API_KEY1': JSON.stringify(
+        process.env.AIR_LABS_API_KEY1
       ),
-      'process.env.AIR_LABS_API_KEY': JSON.stringify(
-        process.env.AIR_LABS_API_KEY
+      'process.env.AIR_LABS_API_KEY2': JSON.stringify(
+        process.env.AIR_LABS_API_KEY2
       ),
     }),
   ],

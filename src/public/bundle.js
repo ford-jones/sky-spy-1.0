@@ -4285,6 +4285,7 @@ function App() {
     geofence = _useState12[0],
     setGeofence = _useState12[1];
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    window.addEventListener('load', onLoad);
     navigator.geolocation.getCurrentPosition(function (position) {
       setLocation({
         lon: position.coords.longitude,
@@ -4298,7 +4299,6 @@ function App() {
           west: location.lon - 0.5
         });
       }
-      window.addEventListener('load', onLoad);
       setTimeout(function () {
         location !== null && geofence !== null ? setLoading(false) : null;
       }, 5000);
@@ -4308,7 +4308,7 @@ function App() {
     e.preventDefault();
     if (data.length < 1) {
       var fetchFlightData = function fetchFlightData(method, params) {
-        var api_key = "".concat("af7462db-fecd-4bab-bb5a-ae779d3fbf9d");
+        var api_key = "".concat("99d9731b-4d52-4a43-9c36-9eb48499f3c8");
         params.api_key = api_key;
         axios__WEBPACK_IMPORTED_MODULE_4__["default"].get("https://airlabs.co/api/v9/".concat(method), {
           params: params
@@ -4327,15 +4327,11 @@ function App() {
   }
   function handleClick(e) {
     e.preventDefault();
-    var depAkl = data.filter(function (x) {
-      return x.dep_iata === 'AKL';
+    var nearby = data.filter(function (flightLocation) {
+      return flightLocation.lat < geofence.north && flightLocation.lat > geofence.south && flightLocation.lng < geofence.east && flightLocation.lng > geofence.west && flightLocation.status === 'en-route';
     });
-    var arrAkl = data.filter(function (x) {
-      return x.arr_iata === 'AKL';
-    });
-    var nearby = depAkl.concat(arrAkl);
     nearby.map(function (flight) {
-      if (flight.lat < geofence.north && flight.lat > geofence.south && flight.lng < geofence.east && flight.lng > geofence.west && flight.status === 'en-route') {
+      if (flight.arr_iata && flight.dep_iata) {
         setLocal(local.push(flight));
         var setFlights = JSON.stringify(local);
         localStorage.setItem('flights', setFlights);
@@ -4346,7 +4342,7 @@ function App() {
   }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "main"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("img", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", null, "Track commercial airlines you see in the sky in real time!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("img", {
     src: "./images/home.png",
     alt: "plane_image"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", null, "Sky Spy 1.0.0"), loading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_Loader__WEBPACK_IMPORTED_MODULE_2__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, dataReady ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_Flights__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -4356,83 +4352,6 @@ function App() {
     onClick: handleClick
   }, "get flight data"))));
 }
-
-//  Dummy data:
-
-// [{
-//  aircraft_icao: "B789"
-//  airline_iata: "CZ"
-//  airline_icao: "CSN"
-//  alt: 10965
-//  arr_iata: "CAN"
-//  arr_icao: "ZGGG"
-//  dep_iata: "AKL"
-//  dep_icao: "NZAA"
-//  dir: 322
-//  flag: "CN"
-//  flight_iata: "CZ306"
-//  flight_icao: "CSN306"
-//  flight_number: "306"
-//  hex: "781360"
-//  lat: -12.041582
-//  lng: 141.385223
-//  reg_number: "B-1242"
-//  speed: 857
-//  squawk: "0234"
-//  status: "en-route"
-//  updated: 1681832020
-//  v_speed: 0.3
-// },
-// {
-//  aircraft_icao: "B738"
-//  airline_iata: "QF"
-//  airline_icao: "QFA"
-//  alt: 0
-//  arr_iata: "MEL"
-//  arr_icao: "YMML"
-//  dep_iata: "AKL"
-//  dep_icao: "NZAA"
-//  dir: 253
-//  flag: "AU"
-//  flight_iata: "QF158"
-//  flight_icao: "QFA158"
-//  flight_number: "158"
-//  hex: "7C77F4"
-//  lat: -37.667732
-//  lng: 144.847244
-//  reg_number: "VH-XZA"
-//  speed: 3
-//  squawk: "0240"
-//  status: "landed"
-//  updated: 1681831989
-// },
-// {
-// aircraft_icao: "B733"
-// airline_icao: "AWK"
-// alt: 11277
-// arr_iata: "AKL"
-// arr_icao: "NZAA"
-// dep_iata: "MEL"
-// dep_icao: "YMML"
-// dir: 58
-// flag: "NZ"
-// flight_icao: "AWK5"
-// flight_number: "5"
-// hex: "C81E1C"
-// lat: -31.486025
-// lng: 156.483658
-// reg_number: "ZK-TLE"
-// speed: 768
-// squawk: "1507"
-// status: "en-route"
-// updated: 1681831514
-// v_speed: 0.3
-// }
-// ]
-
-//
-
-// geofence: {north: -36.3646739, east: 175.2493547, south: -37.3646739, west: 174.2493547}
 
 /***/ }),
 
@@ -4462,7 +4381,7 @@ function Flights(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, "Flying over your location:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "textbox"
   }, orderedFlights.map(function (flight) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Registration: ", flight.reg_number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Flight Number: ", flight.flight_number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Flag: ", flight.flag), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Departed From: ", flight.dep_iata), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Arriving At: ", flight.arr_iata), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Last updated: ", new Date(flight.updated).getTime()), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Registration: ", flight.reg_number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Flight Number: ", flight.flight_number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Flag: ", flight.flag), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Departed From: ", flight.dep_iata), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Arriving At: ", flight.arr_iata), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Last updated: ", new Date(flight.updated).getMinutes(), " minutes ago."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "break"
     }));
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {

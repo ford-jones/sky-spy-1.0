@@ -24,7 +24,7 @@ export default function Flights({ location }) {
               <p>Flag: {flight.flag}</p>
               <p>Departed From: {flight.dep_iata}</p>
               <p>Arriving At: {flight.arr_iata}</p>
-              <p>Last updated: {new Date(flight.updated).getTime()}</p>
+              <p>Last updated: {new Date(flight.updated).getMinutes()} minutes ago.</p>
               <div className="break"></div>
             </>
           )
