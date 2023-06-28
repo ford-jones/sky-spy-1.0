@@ -1,7 +1,7 @@
 const server = require('./server')
-const envConfig = require('dotenv').config()
+require('dotenv').config()
 
-if (envConfig.error) throw envConfig.error
+// if (envConfig.error) throw envConfig.error
 
 if (process.env.NODE_ENV === 'development') {
   const PORT = process.env.LOCAL_PORT
