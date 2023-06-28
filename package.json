@@ -12,7 +12,7 @@
     "dev:server": "nodemon --watch server src/index.js",
     "build": "webpack --config ./client/webpack.config.js",
     "build:client": "npm run webpack",
-    "build:server": "nodemon src",
+    "build:server": "nodemon server src/index.js",
     "lint": "eslint --ext .js,.jsx .",
     "webpack": "webpack --config ./client/webpack.config.js"
   },
